@@ -29,5 +29,5 @@ Once all the STE features have been calculated, go to ./core/config.py and chang
 use ./ASC_forward.py to forward the models produced by the last step
 
 
-### Models
+### Pretrained Models
 [Short Term Encoder](https://filedn.com/l0kNCNuXuEq70c3iUHsXxJ7/active-speakers-context/STE.pth) 
