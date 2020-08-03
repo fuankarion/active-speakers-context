@@ -51,10 +51,10 @@ def csv_to_list(csv_path):
 
 
 if __name__ == '__main__':
-    predicitions_dir = '...'
-    ava_csv_files = '...' #original ava csv files
+    predicitions_dir = '...' #directory with predictions
+    ava_csv_files = '...' #directory with original ava csv files
 
-    temporary_dir = '.../tmp'
+    temporary_dir = '.../tmp' #Any EMPTY directory
     target_csv_pred = '.../ASCPredictions.csv'
     target_csv_gt = '.../FullAVAGT.csv'
 
