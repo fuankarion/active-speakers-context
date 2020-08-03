@@ -28,10 +28,10 @@ The Active Speaker Context relies on the features extracted from the STE for its
 Once all the STE features have been calculated, go to `./core/config.py` and change the dictionary `ASC_inputs` modify the value of keys, `features_train_full`, `features_val_full`, and `models_out` so that they point to the local directories where the features extracted with the STE in the train and val set have been stored, and an empty directory where the  ASC models will 'be stored.  Execute `./ASC_train.py clip_lenght skip_frames speakers cuda_device_number` clip_lenght must be the same clip size used to train the STE, skip_frames determines the amount of frames in between sampled clips, we used 4 for the results presented in the paper, speakers is the number of candidates speakers in the contex.
 
 ### Forward ASC
-use `./ASC_forward.py clips time_stride speakers cuda_device_number` to forward the models produced by the last step.
+use `./ASC_forward.py clips time_stride speakers cuda_device_number` to forward the models produced by the last step. Use the same clip and stride configurations. You will get one csv file for every video, for evaluation purposes use the script ASC_predcition_postprocessing.py to generate a single CSV file which is compatible with the evaluation tool, check lines 54 to 59 and adapt the paths to your local configuration.
 
 
-### Pretrained Models
+### Pre-Trained Models
 [Short Term Encoder](https://filedn.com/l0kNCNuXuEq70c3iUHsXxJ7/active-speakers-context/STE.pth) 
 
 [Active Speaker Context](https://filedn.com/l0kNCNuXuEq70c3iUHsXxJ7/active-speakers-context/ASC.pth)
