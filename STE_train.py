@@ -25,7 +25,7 @@ if __name__ == '__main__':
     image_size = (144, 144) #Dont forget to assign this same size on ./core/custom_transforms
 
     # check these 3 are in order, everythine else is kind of automated
-    model_name = 'ste_encoder_big'
+    model_name = 'ste_encoder'
     io_config = exp_conf.STE_inputs
     opt_config = exp_conf.STE_optimization_params
     opt_config['batch_size'] = 128

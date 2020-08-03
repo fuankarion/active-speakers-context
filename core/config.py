@@ -9,11 +9,10 @@ STE_inputs = {
     'csv_train_full': '.../ava_activespeaker_train_augmented.csv',
     'csv_val_full': '.../ava_activespeaker_val_augmented.csv',
 
-    # Data dirs
-    'audio_dir': '.../instance_wavs_time/',
-    'video_dir': '.../instance_crops_time/',
+    # Data config
+    'audio_dir': '..../instance_wavs_time/',
+    'video_dir': '..../instance_crops_time/',
     'models_out': '...'
-
 }
 
 ASC_inputs = {
@@ -28,7 +27,7 @@ ASC_inputs = {
 ASC_inputs_forward = {
     # input files
     'features_train_full': '...',
-    'features_val_full': '...',
+    'features_val_full': '.../val_forward'
 }
 
 #Optimization params
@@ -70,4 +69,10 @@ ASC_optimization_params = {
     # Batch Config
     'batch_size': 64,
     'threads': 0
+}
+
+ASC_forward_params = {
+    # Batch Config
+    'batch_size': 1,
+    'threads': 1
 }

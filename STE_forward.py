@@ -1,4 +1,3 @@
-#TODO two files for this one for train one for val
 import os
 import csv
 import sys

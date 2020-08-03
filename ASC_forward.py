@@ -1,43 +1,73 @@
-# Active Speakers in Context
-This repo contains the official code and models for the "Active Speakers in Context" CVPR 2020 [paper](https://arxiv.org/pdf/2005.09812.pdf).
+#TODO two files for this one for train one for val
+import os
+import csv
+import sys
+import torch
+
+from torch.optim import lr_scheduler
+from torch.utils.data import DataLoader
+
+from core.dataset import ASCFeaturesDatasetForwardPhase
+from core.optimization import optimize_av_losses
+from core.models import ASC_Net
+from core.io import set_up_log_and_ws_out
+from core.util import configure_backbone_forward_phase, load_train_video_set, load_val_video_set
+
+import core.custom_transforms as ct
+import core.config as exp_conf
 
 
-## Before Training
-This code works over  face crops and their corresponding audio track, before you start training you need to preprocess the videos in the AVA dataset:
+def select_files(pred_source, gt_source):
+    pred_files = glob.glob(pred_source+'/*.csv')
+    pred_files.sort()
 
-1. Extract the audio tracks from every video in the dataset. Go to ./data/extract_audio_tracks.py in  __main__ adapt the `ava_video_dir` (directory with the original ava videos) and `target_audios` (empty directory where the audio tracks will be stores) to your local file system. The code relies on 16k wav files and will fail with other formats and bit rates.
-2. Slice the audio tracks by timestamp. Go to ./data/slice_audio_tracks.py in  __main__ adapt the `ava_audio_dir` (the audio tracks you extracted on step 1), `output_dir` (empty directory where you will store the sliced audio files) and  `csv` (....) to your local file system.
-3. Extract the face crops by timestamp. Go to ./data/extract_audio_tracks.py in  __main__ adapt the `ava_video_dir` (directory with the original ava videos), `csv_file` (....) and  `output_dir` (empty directory where you will store the face crops) to your local file system.
+    gt_files = glob.glob(gt_source+'/*.csv')
+    gt_files.sort()
 
-The full audio tracks obtained on 1 step 1. will not be used anyore.
-
-## Training
-Training the Active Speaker Context is divided in two major stages: the optimization of the Short-Term Encoder and the optimization of the Context Ensemble Network. The second step includes the pair-wise refinement and the temporal refinement, and relies on a full forward pass of the Short-Term Encoder on the training and validation sets.
-
-### Training the Short-Term Encoder
-Got to ./core/config.py  and modify the ` STE_inputs`  dictionary so that the keys audio_dir, video_dir and models_out point to the directories with the extracted audio clips, face crops and an empty directory where the STE models will be saved.
-
-Execute the script python `STE_train.py clip_lenght cuda_device_number`, we used clip_lenght=11 on the paper, it can be set to any uneven value greater than 0 but performance will vary.
-
-### Forward Short Term Encoder
-Training on the Active Speaker context relies on extracting high-level features from the STE over the full active speaker set. Execute the script `python STE_forward.py clip_lenght cuda_device_number`, **use the same clip_lenght as the training**.
-
-The STE_forward.py relies on the same input files as the STE_train.py script, no extra adjustment should be required. To switch between training and val sets go to lines 44 and 45 to obtain a list of training and val videos, you will need both subsets for the next step.
-
-### Training the Active Speaker Context
-Got to ./core/config.py  and modify the ` ASC_inputs`  dictionary so that the keys features_train_full, features_val_full and  point to the directories with the extracted  short term encoder features in training and validations sets, and an empty directory where the  models will be stored
-
-Execute the script python `ASC_train.py  time_lenght time_stride speakers cuda_device_number`, in the paper we used time_lenght=11 time_stride=4  and speakers=3, these params can be se to any  value greater than 0 but performance will vary.
-
-### Forward the AS Model
-As final step use the script ‘ASC_forward.py’ go to lines 22 and 23 and select the model weights and the directory where you will forward the final predictions.
+    return pred_files, gt_files
 
 
-# Using the Docker image
-Coming soon...
+#Written for simplicity, paralelize/shard as you wish
+if __name__ == '__main__':
+    clips = int(sys.argv[1])
+    time_stride = int(sys.argv[2])
+    speakers = int(sys.argv[3])
+    cuda_device_number = str(sys.argv[4])
+
+    model_weights = '...'
+    target_directory = '...'
+    io_config = exp_conf.ASC_inputs_forward
+    opt_config = exp_conf.ASC_forward_params
+
+    # cuda config
+    has_cuda = torch.cuda.is_available()
+    device = torch.device('cuda:'+cuda_device_number if has_cuda else 'cpu')
+
+    backbone = ASC_Net(clip_number=clips, candidate_speakers=speakers )
+    backbone.load_state_dict(torch.load(model_weights, map_location='cpu'))
+    backbone.eval()
+    backbone = backbone.to(device)
 
 
-# Official models
-If you just want to use the active speakers in context models in forward phase download our models here
+    val_videos =  load_val_video_set()
 
-Coming soon...
+    for video_key in val_videos:
+        print('forward video ', video_key)
+        with open(os.path.join(target_directory, video_key+'.csv'), mode='w') as vf:
+            vf_writer = csv.writer(vf, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+            features_file = os.path.join(io_config['features_val_full'], video_key+'.csv')
+            d_val = ASCFeaturesDatasetForwardPhase(features_file, clips, time_stride, speakers)
+
+            dl_val = DataLoader(d_val, batch_size=opt_config['batch_size'],
+                                shuffle=False, num_workers=opt_config['threads'])
+
+            for idx, dl in enumerate(dl_val):
+                print(' \t Forward iter ', idx, '/', len(dl_val), end='\r')
+                features, video_id, ts, entity_id = dl
+                features = features.to(device)
+
+                with torch.set_grad_enabled(False):
+                    pred = backbone(features)
+                    pred = pred.detach().cpu().numpy()
+                    vf_writer.writerow([entity_id[0], ts[0], str(pred[0][0]), str(pred[0][1])])
