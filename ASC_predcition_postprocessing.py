@@ -51,12 +51,12 @@ def csv_to_list(csv_path):
 
 
 if __name__ == '__main__':
-    predicitions_dir = '...' #directory with predictions
-    ava_csv_files = '...' #directory with original ava csv files
+    predicitions_dir = '...' #directory with network predictions
+    ava_csv_files = '...' # directory with original ava csv files
 
     temporary_dir = '.../tmp' #Any EMPTY directory
-    target_csv_pred = '.../ASCPredictions.csv'
-    target_csv_gt = '.../FullAVAGT.csv'
+    target_csv_pred = '.../ASCPredictions.csv' # Final prediction file
+    target_csv_gt = '.../FullAVAGT.csv' #utility file to use the official evaluation tool
 
 
     del_files = glob.glob(temporary_dir+'/*')
