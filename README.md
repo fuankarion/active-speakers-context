@@ -23,6 +23,7 @@ Execute the script `STE_train.py clip_lenght cuda_device_number`, we used clip_l
 
 ### Forward Short Term Encoder
 The Active Speaker Context relies on the features extracted from the STE for its optimization, execute the script python `STE_forward.py clip_lenght cuda_device_number`, use the same clip_lenght as the training. Check lines 44 and 45 to switch between a list of training and val videos, **you will need both subsets** for the next step.
+If you want to evaluate on the AVA Active Speaker Datasets, use ./STE_postprocessing.py, check lines 44 to 50 and adjust the files to your local file system.
 
 ### Training the ASC Module
 Once all the STE features have been calculated, go to `./core/config.py` and change the dictionary `ASC_inputs` modify the value of keys, `features_train_full`, `features_val_full`, and `models_out` so that they point to the local directories where the features extracted with the STE in the train and val set have been stored, and an empty directory where the  ASC models will 'be stored.  Execute `./ASC_train.py clip_lenght skip_frames speakers cuda_device_number` clip_lenght must be the same clip size used to train the STE, skip_frames determines the amount of frames in between sampled clips, we used 4 for the results presented in the paper, speakers is the number of candidates speakers in the contex.
