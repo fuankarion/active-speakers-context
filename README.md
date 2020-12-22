@@ -9,7 +9,7 @@ This code works over face crops and their corresponding audio track, before you 
 
 1. Extract the audio tracks from every video in the dataset. Go to ./data/extract_audio_tracks.py in  __main__ adapt the `ava_video_dir` (directory with the original ava videos) and `target_audios` (empty directory where the audio tracks will be stored) to your local file system. **The code relies on 16k .wav files and will fail with other formats and bit rates**.
 2. Slice the audio tracks by timestamp. Go to ./data/slice_audio_tracks.py in  __main__ adapt the `ava_audio_dir` (the directory with the audio tracks you extracted on step 1), `output_dir` (empty directory where you will store the sliced audio files) and  `csv` (the utility file you download previously, use the set accordingly) to your local file system.
-3. Extract the face crops by timestamp. Go to ./data/extract_audio_tracks.py in  __main__ adapt the `ava_video_dir` (directory with the original ava videos), `csv_file` (the utility file you download previously, use the train/val/test set accordingly) and  `output_dir` (empty directory where you will store the face crops) to your local file system. This process will result in about 124GB extra data.
+3. Extract the face crops by timestamp. Go to ./data/extract_face_crops_time.py in  __main__ adapt the `ava_video_dir` (directory with the original ava videos), `csv_file` (the utility file you download previously, use the train/val/test set accordingly) and  `output_dir` (empty directory where you will store the face crops) to your local file system. This process will result in about 124GB extra data.
 
 The full audio tracks obtained on step 1. will not be used anymore.
 
