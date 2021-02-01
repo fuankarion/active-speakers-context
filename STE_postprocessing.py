@@ -45,7 +45,7 @@ if __name__ == '__main__':
     ava_ground_truth_dir = '.../AVA/csv/val' #AVA original ground truth files
     temporary_dir = '.../temp/activeSpeakers' #Just an empty temporary dir
 
-    # You need both to use AVA evaluation
+    # The script will generate these two, use them for the official AVA evaluation
     dataset_predictions_csv = '.../Forwards/ActiveSpeakers/publish/final/STE.csv'  #file with final predictions
     dataset_gt_csv = '...Forwards/ActiveSpeakers/publish/final/gt.csv' # Utility file to use the official evaluation tool
 
