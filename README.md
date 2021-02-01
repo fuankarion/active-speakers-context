@@ -38,3 +38,8 @@ If you want to evaluate on the AVA Active Speaker Datasets, use ./ASC_predcition
 [Short Term Encoder](https://filedn.com/l0kNCNuXuEq70c3iUHsXxJ7/active-speakers-context/STE.pth) 
 
 [Active Speaker Context](https://filedn.com/l0kNCNuXuEq70c3iUHsXxJ7/active-speakers-context/ASC.pth)
+
+
+### Prediction Postprocessing and Evaluation
+The prediction format follows the very same format of the AVA-Active speaker dataset, but contains an extra value for the active speaker class in the final column. The script `./STE_postprocessing.py` handles this step. Check lines 44, 45 and 46 and set the directory where you saved the output of the forward pass (44), the directory with the original ava csv (45) and and empty temporary directory (46). Additionally set on lines 48 and 49 the outputs of the script, one of them is the final prediction formated to use the official evaluation tool and the other one is a utility file to use along the same tool.
+Notice you can do some temporal smoothing on the function 'softmax_feats', is a simple median filter and you can choose the window size on lines 35 and 36. 
