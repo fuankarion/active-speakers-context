@@ -61,7 +61,7 @@ if __name__ == '__main__':
         gt_data = csv_to_list(gtf)
 
         print('Match', os.path.basename(pf), len(prediction_data), len(gt_data))
-        if len(prediction_data), len(gt_data):
+        if len(prediction_data)!= len(gt_data):
             raise Exception('Groundtruth and prediction dont match in lenght')
 
         post_processed_predictions = prediction_postprocessing(prediction_data, 1)
