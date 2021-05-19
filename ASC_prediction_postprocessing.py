@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     temporary_dir = '.../tmp' #Any EMPTY directory
     target_csv_pred = '.../ASCPredictions.csv' # Final prediction file
-    target_csv_gt = '.../FullAVAGT.csv' #utility file to use the official evaluation tool
+    target_csv_gt = '.../gt.csv' #utility file to use the official evaluation tool
 
 
     del_files = glob.glob(temporary_dir+'/*')
