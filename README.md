@@ -32,7 +32,7 @@ Once all the STE features have been calculated, go to `./core/config.py` and cha
 ### Forward ASC
 use `./ASC_forward.py clips time_stride speakers cuda_device_number` to forward the models produced by the last step. Use the same clip and stride configurations. You will get one csv file for every video, for evaluation purposes use the script ASC_predcition_postprocessing.py to generate a single CSV file which is compatible with the evaluation tool, check lines 54 to 59 and adapt the paths to your local configuration.
 
-If you want to evaluate on the AVA Active Speaker Datasets, use ./ASC_predcition_postprocessing.py, check lines 54 to 59 and adjust the files to your local file system.
+If you want to evaluate on the AVA Active Speaker Datasets, use ./ASC_prediction_postprocessing.py, check lines 54 to 59 and adjust the files to your local file system.
 
 ### Pre-Trained Models
 [Short Term Encoder](https://filedn.com/l0kNCNuXuEq70c3iUHsXxJ7/active-speakers-context/STE.pth) 
