@@ -69,7 +69,7 @@ if __name__ == '__main__':
         gt_data = csv_to_list(os.path.join(ava_csv_files, os.path.basename(pf)[:-4]+'-activespeaker.csv'))
 
         print(idx, os.path.basename(pf), len(pred_data), len(gt_data))
-        post_processed_data = softmax_feats(pf)
+        post_processed_data = softmax_feats(pf, 1)
 
         for idx in range(len(post_processed_data)):
             post_processed_data[idx] = [gt_data[idx][0], gt_data[idx][1],
