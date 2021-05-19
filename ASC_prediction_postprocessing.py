@@ -23,7 +23,7 @@ def select_files(pred_source, gt_source):
 
     return pred_files, gt_files
 
-def softmax_feats(source):
+def softmax_feats(source, filter_lenght):
     print(source)
     data = csv_to_list(source)
 
@@ -32,8 +32,8 @@ def softmax_feats(source):
         positive_predictions.append( [float(d[-2]), float(d[-1])] )
     positive_predictions = np.asarray(positive_predictions)
 
-    positive_predictions[..., 0] = medfilt(positive_predictions[..., 0], 11)
-    positive_predictions[..., 1] = medfilt(positive_predictions[..., 1], 11)
+    positive_predictions[..., 0] = medfilt(positive_predictions[..., 0], filter_lenght)
+    positive_predictions[..., 1] = medfilt(positive_predictions[..., 1], filter_lenght)
     positive_predictions = softmax(positive_predictions, axis = -1)
 
     for idx in range(len(data)):
@@ -52,7 +52,7 @@ def csv_to_list(csv_path):
 
 if __name__ == '__main__':
     predicitions_dir = '...' #directory with network predictions
-    ava_csv_files = '...' # directory with original ava csv files
+    ava_csv_files = '.../AVA/csv/val' # directory with original ava csv files
 
     temporary_dir = '.../tmp' #Any EMPTY directory
     target_csv_pred = '.../ASCPredictions.csv' # Final prediction file
